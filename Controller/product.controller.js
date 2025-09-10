@@ -1,5 +1,7 @@
 import productModel from "../Model/product.model.js";
 
+//to create a new product
+
 export  function createProduct(req,res){
 
       const {id, name, price, description, stockQuantity } = req.body;
@@ -21,7 +23,7 @@ export  function createProduct(req,res){
       })
 }
 
-
+//to fetch all products
 export function fetchProducts(req,res){
 
     productModel.find().then((data)=>{
@@ -37,7 +39,7 @@ export function fetchProducts(req,res){
     })
 }
 
-
+//to fetch product with specific id
 export function fetchProductWithId(req, res) {
     const id = req.params.id; 
 
@@ -54,7 +56,7 @@ export function fetchProductWithId(req, res) {
 }
 
 
-
+//to update product details
 export  function updateCart(req,res){
 
     const id = req.params.id;
@@ -82,7 +84,7 @@ export  function updateCart(req,res){
 
 }
 
-
+//to delete a product from cart
   export function removeFromCart(req,res){
 
     const id = req.params.id;

@@ -1,5 +1,7 @@
 import cartModel from "../Model/cart.model.js";
-
+import jwt from "jsonwebtoken";
+import userModel from "../Model/user.model.js";
+//to create a new product
 export  function createProduct(req,res){
 
       const {id, name, price, description, stockQuantity } = req.body;
@@ -21,7 +23,7 @@ export  function createProduct(req,res){
       })
 }
 
-
+//to fetch all products
 export function fetchProducts(req,res){
 
     cartModel.find().then((data)=>{
@@ -37,6 +39,7 @@ export function fetchProducts(req,res){
     })
 }
 
+//to fetch product with specific id
 
 export function fetchProductWithId(req, res) {
     const id = req.params.id; 
@@ -54,7 +57,7 @@ export function fetchProductWithId(req, res) {
 }
 
 
-
+//to update product details
 export  function updateCart(req,res){
 
     const id = req.params.id;
@@ -82,7 +85,7 @@ export  function updateCart(req,res){
 
 }
 
-
+//to delete a product from cart
   export function removeFromCart(req,res){
 
     const id = req.params.id;
@@ -98,4 +101,52 @@ export  function updateCart(req,res){
         return res.status(500).json({message:"Somethig went wrong", error: err.message})
     })) 
 
+}
+
+//to create jwt token
+
+export function createToken(req, res) {
+
+    const user  = req.body.username;
+    const accessToken= jwt.sign({user:user},"secretkey", {expiresIn:'15m'})
+    res.send({token:accessToken})
+   
+}
+
+//to authenticate user using jwt token
+export function authenticateUser(req,res,next){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if(!token) return res.status(403).json({message:"please provide your credentials"})
+    jwt.verify(token, 'secretkey', (err,user)=>{
+
+         
+        if(err){
+            return res.status(403).json({message:"invalid jwt token"})
+        }
+
+        req.user = user;
+        next();
+    })
+}
+
+
+//to register a new user
+export  function regesterUser(req,res){
+
+      const { username , password } = req.body;
+
+      const newUser  = new userModel({
+           username :username,
+              password:password
+      })
+
+      newUser.save().then((data)=>{
+        if(!data){
+            res.status(400).json({message:"Error in creating product"})
+        }
+
+        res.send(data);
+      })
 }

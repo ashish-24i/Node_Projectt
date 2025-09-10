@@ -1,4 +1,4 @@
-import {createProduct, removeFromCart, fetchProductWithId,  fetchProducts , updateCart} from "../Controller/cart.controller.js"
+import {createProduct, regesterUser , removeFromCart, fetchProductWithId, authenticateUser, fetchProducts, createToken  , updateCart} from "../Controller/cart.controller.js"
 
 
 
@@ -9,14 +9,19 @@ export function routes1(app){
     try{
    app.post("/cart",createProduct);
 
-    app.get("/carts" , fetchProducts);
-    app.get("/carts/:id" , fetchProductWithId);
+    app.get("/carts" , authenticateUser , fetchProducts);
+    app.get("/carts/:id" ,authenticateUser, fetchProductWithId);
     
-    app.put("/cart/:id",  updateCart);
+    app.put("/cart/:id",authenticateUser , updateCart);
 
 
-    app.delete("/cart/:id",  removeFromCart);
+    app.delete("/cart/:id",authenticateUser , removeFromCart);
+     
+    app.post("/login", createToken)
 
+    app.post("/register", regesterUser)
+
+     
 
     }
     catch(error){
