@@ -4,6 +4,8 @@ import express from 'express';
 
 import {routes} from "./Routes/product.routes.js";
 
+import {routes1} from "./Routes/cart.route.js";
+
 import mongoose  from 'mongoose';
 
 const app = express();
@@ -34,4 +36,6 @@ db.on("error",(err)=>{
 
 
 routes(app);
+
+routes1(app);
 

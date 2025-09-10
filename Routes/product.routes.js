@@ -4,15 +4,22 @@ import {createProduct, fetchProducts,fetchProductWithId, removeFromCart , update
 
 export function routes(app){
 
-    app.post("/cart",createProduct);
+
+    try{
+   app.post("/product",createProduct);
 
     app.get("/products" , fetchProducts);
     app.get("/products/:id" , fetchProductWithId);
     
-    app.put("/cart/:id",  updateCart);
+    app.put("/product/:id",  updateCart);
 
 
-    app.delete("/cart/:id",  removeFromCart);
+    app.delete("/product/:id",  removeFromCart);
 
+
+    }
+    catch(error){
+         console.log("error while performing this operation: may be got invalid URL")
+    }
 
 }

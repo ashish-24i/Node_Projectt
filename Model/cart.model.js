@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productSchema=new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
       
        id:{
             type :Number,
@@ -28,6 +28,6 @@ const productSchema=new mongoose.Schema({
 })
 
 
-const productModel = mongoose.model("Product", productSchema);
+const cartModel = mongoose.model("Cart", cartSchema);
 
-export default productModel;
+export default cartModel;
