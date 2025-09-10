@@ -107,10 +107,23 @@ export  function updateCart(req,res){
 
 export function createToken(req, res) {
 
-    const user  = req.body.username;
-    const accessToken= jwt.sign({user:user},"secretkey", {expiresIn:'15m'})
-    res.send({token:accessToken})
-   
+    const { email, password } = req.body;
+
+     userModel.findOne({ email }).then((user)=>{
+    if(!user){
+        return res.status(404).json({message:"user not found"})
+    }
+
+    if(user.password !== password){
+        return res.status(403).json({message:"incorrect password"})
+    }
+      else{
+        const accessToken= jwt.sign({email:email},"secretkey", {expiresIn:'15m'})
+    
+         res.json({ message: "Login successful", accessToken: accessToken });
+      }
+     })
+    
 }
 
 //to authenticate user using jwt token
@@ -134,17 +147,17 @@ export function authenticateUser(req,res,next){
 
 //to register a new user
 export  function regesterUser(req,res){
-
-      const { username , password } = req.body;
+    
+      const { email , password } = req.body;
 
       const newUser  = new userModel({
-           username :username,
-              password:password
+           email:email,
+           password:password 
       })
 
       newUser.save().then((data)=>{
         if(!data){
-            res.status(400).json({message:"Error in creating product"})
+            res.status(400).json({message:"could not register user"})
         }
 
         res.send(data);
